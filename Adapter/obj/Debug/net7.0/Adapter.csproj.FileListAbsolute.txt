@@ -1,0 +1,15 @@
+/Users/kauanbertalha/Documents/GitHub/designPatterns/Adapter/bin/Debug/net7.0/Adapter
+/Users/kauanbertalha/Documents/GitHub/designPatterns/Adapter/bin/Debug/net7.0/Adapter.deps.json
+/Users/kauanbertalha/Documents/GitHub/designPatterns/Adapter/bin/Debug/net7.0/Adapter.runtimeconfig.json
+/Users/kauanbertalha/Documents/GitHub/designPatterns/Adapter/bin/Debug/net7.0/Adapter.dll
+/Users/kauanbertalha/Documents/GitHub/designPatterns/Adapter/bin/Debug/net7.0/Adapter.pdb
+/Users/kauanbertalha/Documents/GitHub/designPatterns/Adapter/obj/Debug/net7.0/Adapter.csproj.AssemblyReference.cache
+/Users/kauanbertalha/Documents/GitHub/designPatterns/Adapter/obj/Debug/net7.0/Adapter.GeneratedMSBuildEditorConfig.editorconfig
+/Users/kauanbertalha/Documents/GitHub/designPatterns/Adapter/obj/Debug/net7.0/Adapter.AssemblyInfoInputs.cache
+/Users/kauanbertalha/Documents/GitHub/designPatterns/Adapter/obj/Debug/net7.0/Adapter.AssemblyInfo.cs
+/Users/kauanbertalha/Documents/GitHub/designPatterns/Adapter/obj/Debug/net7.0/Adapter.csproj.CoreCompileInputs.cache
+/Users/kauanbertalha/Documents/GitHub/designPatterns/Adapter/obj/Debug/net7.0/Adapter.dll
+/Users/kauanbertalha/Documents/GitHub/designPatterns/Adapter/obj/Debug/net7.0/refint/Adapter.dll
+/Users/kauanbertalha/Documents/GitHub/designPatterns/Adapter/obj/Debug/net7.0/Adapter.pdb
+/Users/kauanbertalha/Documents/GitHub/designPatterns/Adapter/obj/Debug/net7.0/Adapter.genruntimeconfig.cache
+/Users/kauanbertalha/Documents/GitHub/designPatterns/Adapter/obj/Debug/net7.0/ref/Adapter.dll
