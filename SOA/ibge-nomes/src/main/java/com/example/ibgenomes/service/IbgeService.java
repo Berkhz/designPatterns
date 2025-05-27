@@ -31,15 +31,49 @@ public class IbgeService {
 
 
     public List<NomeInfo> comparar(List<String> nomes) {
-        String url = BASE_URL + "/compare";
-        NomeInfo[] resposta = restTemplate.postForObject(url, nomes, NomeInfo[].class);
-        return Arrays.asList(resposta);
+        String nomesConcatenados = String.join("|", nomes);
+        String url = BASE_URL + "/" + nomesConcatenados;
+
+        try {
+            NomeInfo[] resposta = restTemplate.getForObject(url, NomeInfo[].class);
+            if (resposta == null || resposta.length == 0) {
+                throw new RuntimeException("Nenhum nome encontrado.");
+            }
+            return Arrays.asList(resposta);
+        } catch (HttpServerErrorException e) {
+            System.out.println("Erro ao acessar a API do IBGE: " + e.getStatusCode());
+            throw new RuntimeException("API do IBGE fora do ar. Tente novamente mais tarde.");
+        }
     }
 
-    public List<NomeInfo> getPorLocalidade(String nome, int localidade) {
-        String url = BASE_URL + "/" + nome + "?localidade=" + localidade;
-        NomeInfo[] resposta = restTemplate.getForObject(url, NomeInfo[].class);
-        return Arrays.asList(resposta);
+    public List<NomeInfo> getPorLocalidade(String nome) {
+        String url = BASE_URL + "/" + nome + "?groupBy=UF";
+
+        try {
+            NomeInfo[] resposta = restTemplate.getForObject(url, NomeInfo[].class);
+            if (resposta == null || resposta.length == 0) {
+                throw new RuntimeException("Nenhum dado encontrado para o nome.");
+            }
+            return Arrays.asList(resposta);
+        } catch (HttpServerErrorException e) {
+            System.out.println("Erro ao acessar a API do IBGE: " + e.getStatusCode());
+            throw new RuntimeException("API do IBGE fora do ar. Tente novamente mais tarde.");
+        }
+    }
+
+    public List<NomeInfo> getPorDecada(int decada) {
+        String url = BASE_URL + "/ranking/?decada=" + decada;
+
+        try {
+            NomeInfo[] resposta = restTemplate.getForObject(url, NomeInfo[].class);
+            if (resposta == null || resposta.length == 0) {
+                throw new RuntimeException("Nenhum dado encontrado para a década.");
+            }
+            return Arrays.asList(resposta);
+        } catch (HttpServerErrorException e) {
+            System.out.println("Erro ao acessar a API do IBGE: " + e.getStatusCode());
+            throw new RuntimeException("API do IBGE fora do ar. Tente novamente mais tarde.");
+        }
     }
 
     public List<NomeInfo.Res> filtrarPorDecada(List<NomeInfo.Res> lista, int inicio, int fim) {
@@ -50,5 +84,21 @@ public class IbgeService {
                     return decada >= inicio && decada <= fim;
                 })
                 .collect(Collectors.toList());
+    }
+
+    public List<NomeInfo> getRankingPorLocalidade(String localidade) {
+        String url = BASE_URL + "/ranking?localidade=" + localidade;
+
+        try {
+            System.out.println(restTemplate.getForObject(url, NomeInfo[].class));
+            NomeInfo[] resposta = restTemplate.getForObject(url, NomeInfo[].class);
+            if (resposta == null || resposta.length == 0) {
+                throw new RuntimeException("Nenhum dado encontrado para a localidade.");
+            }
+            return Arrays.asList(resposta);
+        } catch (HttpServerErrorException e) {
+            System.out.println("Erro ao acessar a API do IBGE: " + e.getStatusCode());
+            throw new RuntimeException("API do IBGE fora do ar. Tente novamente mais tarde.");
+        }
     }
 }

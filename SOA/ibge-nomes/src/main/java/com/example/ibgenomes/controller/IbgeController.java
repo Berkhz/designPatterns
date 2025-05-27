@@ -26,9 +26,9 @@ public class IbgeController {
         return ibgeService.comparar(nomes);
     }
 
-    @GetMapping("/{nome}/localidade/{id}")
-    public List<NomeInfo> porLocalidade(@PathVariable String nome, @PathVariable int id) {
-        return ibgeService.getPorLocalidade(nome, id);
+    @GetMapping("/{nome}/localidade")
+    public List<NomeInfo> porLocalidade(@PathVariable String nome) {
+        return ibgeService.getPorLocalidade(nome);
     }
 
     @GetMapping("/{nome}/periodo")
@@ -37,5 +37,10 @@ public class IbgeController {
                                              @RequestParam int fim) {
         List<NomeInfo> lista = ibgeService.getPorNome(nome);
         return ibgeService.filtrarPorDecada(lista.get(0).getRes(), inicio, fim);
+    }
+
+    @GetMapping("/ranking/localidade")
+    public List<NomeInfo> rankingPorLocalidade(@RequestParam String localidade) {
+        return ibgeService.getRankingPorLocalidade(localidade);
     }
 }

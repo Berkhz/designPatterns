@@ -6,32 +6,147 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-<h2>Evolução do Nome</h2>
+<h2>Tendência de Nomes</h2>
+
+<!-- Buscar por Nome -->
+<h3>Buscar por Nome</h3>
 <input type="text" id="nome" placeholder="Digite um nome" />
-<button onclick="buscar()">Buscar</button>
+<button onclick="buscarPorNome()">Buscar</button>
 <canvas id="grafico" width="400" height="200"></canvas>
 
+<!-- Comparar Nomes -->
+<h3>Comparar Nomes</h3>
+<input type="text" id="nomes" placeholder="Digite nomes separados por vírgula" />
+<button onclick="compararNomes()">Comparar</button>
+<div id="resultadoComparacao"></div>
+
+<!-- Buscar por Localidade -->
+<h3>Buscar por Localidade</h3>
+<input type="text" id="nomeLocalidade" placeholder="Digite um nome" />
+<input type="text" id="localidade" placeholder="Digite o UF da localidade" />
+<button onclick="buscarPorLocalidade()">Buscar</button>
+<div id="resultadoLocalidade"></div>
+
+
+
 <script>
-    async function buscar() {
-      const nome = document.getElementById("nome").value;
-      const res = await fetch(`http://localhost:8080/api/nomes/${nome}`);
-      const data = await res.json();
-      const pontos = data[0].res;
+    async function buscarPorNome() {
+     const nome = document.getElementById("nome").value;
+     const res = await fetch(`http://localhost:8080/api/nomes/${nome}`);
+     const data = await res.json();
+     const pontos = data[0].res;
 
-      const labels = pontos.map(p => p.periodo);
-      const valores = pontos.map(p => p.frequencia);
+     const labels = pontos.map(p => p.periodo);
+     const valores = pontos.map(p => p.frequencia);
 
-      new Chart(document.getElementById("grafico"), {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: nome,
-            data: valores
-          }]
-        }
-      });
+     new Chart(document.getElementById("grafico"), {
+         type: 'line',
+         data: {
+             labels: labels,
+             datasets: [{
+                 label: nome,
+                 data: valores
+             }]
+         }
+     });
+ }
+
+ async function compararNomes() {
+     const nomes = document.getElementById("nomes").value.split(",");
+     const res = await fetch(`http://localhost:8080/api/nomes/comparar`, {
+         method: "POST",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify(nomes)
+     });
+     const data = await res.json();
+
+     const datasets = data.map(nomeInfo => ({
+         label: nomeInfo.nome,
+         data: nomeInfo.res.map(p => p.frequencia),
+         fill: false
+     }));
+
+     const labels = data[0].res.map(p => p.periodo);
+
+     new Chart(document.getElementById("grafico"), {
+         type: 'line',
+         data: {
+             labels: labels,
+             datasets: datasets
+         }
+     });
+ }
+
+async function buscarPorLocalidade() {
+    const localidade = document.getElementById("localidade").value;
+    const res = await fetch(`http://localhost:8080/api/nomes/ranking/localidade?localidade=${localidade}`);
+    const data = await res.json();
+
+    if (!data || data.length === 0) {
+        alert("No data found for the given localidade.");
+        return;
     }
+
+    const labels = data.map(item => item.nome);
+    const valores = data.map(item => item.frequencia);
+
+    new Chart(document.getElementById("grafico"), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: `Ranking de Nomes na Localidade ${localidade}`,
+                data: valores,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: true },
+                title: { display: true, text: `Ranking de Nomes na Localidade ${localidade}` }
+            }
+        }
+    });
+}
+
+
+ async function filtrarPorPeriodo() {
+    const decada = document.getElementById("inicio").value;
+    const res = await fetch(`http://localhost:8080/api/nomes/ranking?decada=${decada}`);
+    const data = await res.json();
+
+    if (!data || data.length === 0) {
+        alert("No data found for the given decade.");
+        return;
+    }
+
+    const labels = data.map(item => item.nome);
+    const valores = data.map(item => item.frequencia);
+
+    new Chart(document.getElementById("grafico"), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: `Ranking de Nomes na Década de ${decada}`,
+                data: valores,
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: true },
+                title: { display: true, text: `Ranking de Nomes na Década de ${decada}` }
+            }
+        }
+    });
+}
 </script>
 </body>
 </html>
