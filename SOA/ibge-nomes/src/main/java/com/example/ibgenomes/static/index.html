@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tendência de Nomes</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<h2>Evolução do Nome</h2>
+<input type="text" id="nome" placeholder="Digite um nome" />
+<button onclick="buscar()">Buscar</button>
+<canvas id="grafico" width="400" height="200"></canvas>
+
+<script>
+    async function buscar() {
+      const nome = document.getElementById("nome").value;
+      const res = await fetch(`http://localhost:8080/api/nomes/${nome}`);
+      const data = await res.json();
+      const pontos = data[0].res;
+
+      const labels = pontos.map(p => p.periodo);
+      const valores = pontos.map(p => p.frequencia);
+
+      new Chart(document.getElementById("grafico"), {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: nome,
+            data: valores
+          }]
+        }
+      });
+    }
+</script>
+</body>
+</html>
