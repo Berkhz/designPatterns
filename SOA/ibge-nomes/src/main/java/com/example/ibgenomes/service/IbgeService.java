@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Service
 public class IbgeService {
     private final RestTemplate restTemplate = new RestTemplate();
-    private final String BASE_URL = "https://servicodados.ibge.gov.br/api/v2/nomes";
+    private final String BASE_URL = "https://servicodados.ibge.gov.br/api/v2/censos/nomes";
 
     public List<NomeInfo> getPorNome(String nome) {
         String url = BASE_URL + "/" + nome;
